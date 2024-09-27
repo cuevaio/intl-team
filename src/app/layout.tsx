@@ -17,7 +17,8 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: 'INTL Team',
-  description: "We are building tools to make the life of the INTL Team members's a lot easier",
+  description:
+    "We're building tools to make the lives of INTL team members a lot easier",
 };
 
 export default function RootLayout({
