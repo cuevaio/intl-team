@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useMutation } from '@tanstack/react-query';
 import { CircleHelpIcon } from 'lucide-react';
 
@@ -22,6 +24,8 @@ import {
 import { createLink } from './create-link.action';
 
 export const CreateLinkForm = () => {
+  const [open, setOpen] = React.useState<boolean>(false);
+
   const { mutate, isPending } = useMutation({
     mutationFn: async (formData: FormData) => {
       const result = await createLink(formData);
@@ -31,10 +35,13 @@ export const CreateLinkForm = () => {
     onError: (error) => {
       alert(error.message);
     },
+    onSuccess: () => {
+      setOpen(false);
+    },
   });
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>Create link</Button>
       </DialogTrigger>
@@ -61,7 +68,7 @@ export const CreateLinkForm = () => {
               <Input
                 id="url"
                 name="url"
-                type="url"
+                type="text"
                 required
                 disabled={isPending}
                 placeholder="https://confluence.powercosts.com/display/HR/Human+Resources+Home"
