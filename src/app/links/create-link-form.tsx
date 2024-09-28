@@ -23,14 +23,17 @@ import {
 
 import { randomLinkKey } from '@/lib/nanoid';
 
+import { CategoryCombobox } from './category-combobox';
 import { createLink } from './create-link.action';
 
 export const CreateLinkForm = () => {
   const [open, setOpen] = React.useState<boolean>(false);
   const [key, setKey] = React.useState<string | undefined>(undefined);
+  const [category, setCategory] = React.useState<string | undefined>(undefined);
 
   React.useEffect(() => {
     setKey(undefined);
+    setCategory(undefined);
   }, [setKey, open]);
 
   React.useEffect(() => {
@@ -51,6 +54,9 @@ export const CreateLinkForm = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (formData: FormData) => {
+      if (category) {
+        formData.append('category', category);
+      }
       const result = await createLink(formData);
 
       if (!result.success) throw new Error(result.error);
@@ -141,9 +147,14 @@ export const CreateLinkForm = () => {
                   autoComplete="off"
                   value={key}
                   onChange={(e) => setKey(e.target.value)}
-                  placeholder="(Optional)"
+                  placeholder="(optional)"
                 />
               </div>
+            </div>
+
+            <div className="flex flex-col space-y-2">
+              <Label>Category</Label>
+              <CategoryCombobox selected={category} setSelected={setCategory} />
             </div>
           </div>
 

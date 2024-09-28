@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { db } from '@/db';
 import { links } from '@/db/schema';
 
+import { CATEGORIES } from '@/lib/constants';
 import { nanoid, randomLinkKey } from '@/lib/nanoid';
 
 export async function createLink(formData: FormData): Promise<
@@ -24,6 +25,17 @@ export async function createLink(formData: FormData): Promise<
     return {
       success: false,
       error: 'Url: ' + urlParsing.error.issues[0].message,
+    };
+  }
+  const categoryParsing = z
+    .enum(CATEGORIES)
+    .optional()
+    .safeParse(formData.get('category'));
+
+  if (!categoryParsing.success) {
+    return {
+      success: false,
+      error: 'Category: ' + categoryParsing.error.issues[0].message,
     };
   }
 
@@ -66,6 +78,7 @@ export async function createLink(formData: FormData): Promise<
       id: nanoid(),
       url: urlParsing.data,
       key: key!,
+      category: categoryParsing.data,
     });
 
     revalidatePath(`/links`, 'page');

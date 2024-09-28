@@ -1,0 +1,17 @@
+export const CATEGORIES = [
+  'Development',
+  'Documentation',
+  'APIs',
+  'Visualization',
+  'Repositories',
+  'Testing',
+  'Analytics',
+  'Collaboration',
+  'Learning',
+  'News',
+  'Deployment',
+  'Security',
+  'Performance',
+  'Design',
+  'Databases',
+] as const;
