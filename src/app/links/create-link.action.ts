@@ -18,7 +18,7 @@ export async function createLink(formData: FormData): Promise<
 > {
   let url = String(formData.get('url'));
   if (!url.startsWith('https://')) url = 'https://' + url;
-  
+
   const key = formData.get('key');
 
   const urlParsing = z.string().url().safeParse(url);

@@ -26,6 +26,21 @@ import { createLink } from './create-link.action';
 export const CreateLinkForm = () => {
   const [open, setOpen] = React.useState<boolean>(false);
 
+  React.useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'm' || event.key === 'M') {
+        event.preventDefault(); // Prevent the 'M' from being typed
+        setOpen(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
+
   const { mutate, isPending } = useMutation({
     mutationFn: async (formData: FormData) => {
       const result = await createLink(formData);
@@ -43,7 +58,12 @@ export const CreateLinkForm = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Create link</Button>
+        <Button>
+          Create link
+          <div className="ml-2 size-4 rounded bg-muted text-xs text-primary">
+            M
+          </div>
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <form action={mutate}>
@@ -73,6 +93,7 @@ export const CreateLinkForm = () => {
                 disabled={isPending}
                 placeholder="https://confluence.powercosts.com/display/HR/Human+Resources+Home"
                 autoFocus
+                autoComplete="off"
               />
             </div>
             <div>
@@ -93,6 +114,7 @@ export const CreateLinkForm = () => {
                   required
                   disabled={isPending}
                   className="z-[1] rounded-l-none tracking-wide"
+                  autoComplete="off"
                 />
               </div>
             </div>
