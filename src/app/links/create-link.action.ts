@@ -2,13 +2,13 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { DrizzleError } from 'drizzle-orm';
+import { DrizzleError, eq } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { db } from '@/db';
 import { links } from '@/db/schema';
 
-import { nanoid } from '@/lib/nanoid';
+import { nanoid, randomLinkKey } from '@/lib/nanoid';
 
 export async function createLink(formData: FormData): Promise<
   | {
@@ -19,8 +19,6 @@ export async function createLink(formData: FormData): Promise<
   let url = String(formData.get('url'));
   if (!url.startsWith('https://')) url = 'https://' + url;
 
-  const key = formData.get('key');
-
   const urlParsing = z.string().url().safeParse(url);
   if (!urlParsing.success) {
     return {
@@ -29,23 +27,45 @@ export async function createLink(formData: FormData): Promise<
     };
   }
 
-  const keyParsing = z
-    .string({ description: 'key' })
-    .min(1)
-    .max(255)
-    .safeParse(key);
-  if (!keyParsing.success) {
-    return {
-      success: false,
-      error: 'Title: ' + keyParsing.error.issues[0].message,
-    };
+  let key: string | undefined = undefined;
+
+  if (formData.get('key')) {
+    const keyParsing = z
+      .string({ description: 'key' })
+      .min(1)
+      .max(255)
+      .safeParse(formData.get('key'));
+
+    if (!keyParsing.success) {
+      return {
+        success: false,
+        error: 'Title: ' + keyParsing.error.issues[0].message,
+      };
+    } else {
+      key = keyParsing.data;
+    }
+  }
+
+  if (!key) {
+    const randomKey = randomLinkKey();
+    while (true) {
+      const existingLink = await db
+        .select()
+        .from(links)
+        .where(eq(links.key, randomKey));
+
+      if (existingLink.length === 0) {
+        key = randomKey;
+        break;
+      }
+    }
   }
 
   try {
     await db.insert(links).values({
       id: nanoid(),
       url: urlParsing.data,
-      key: keyParsing.data,
+      key: key!,
     });
 
     revalidatePath(`/links`, 'page');

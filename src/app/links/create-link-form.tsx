@@ -3,7 +3,7 @@
 import React from 'react';
 
 import { useMutation } from '@tanstack/react-query';
-import { CircleHelpIcon } from 'lucide-react';
+import { CircleHelpIcon, ShuffleIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -21,12 +21,20 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
+import { randomLinkKey } from '@/lib/nanoid';
+
 import { createLink } from './create-link.action';
 
 export const CreateLinkForm = () => {
   const [open, setOpen] = React.useState<boolean>(false);
+  const [key, setKey] = React.useState<string | undefined>(undefined);
 
   React.useEffect(() => {
+    setKey(undefined);
+  }, [setKey, open]);
+
+  React.useEffect(() => {
+    if (open) return;
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key === 'c' || event.key === 'C') {
         event.preventDefault(); // Prevent the 'C' from being typed
@@ -39,7 +47,7 @@ export const CreateLinkForm = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, []);
+  }, [open]);
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (formData: FormData) => {
@@ -54,6 +62,12 @@ export const CreateLinkForm = () => {
       setOpen(false);
     },
   });
+
+  const setRandomKey: React.MouseEventHandler<HTMLButtonElement> =
+    React.useCallback(() => {
+      const randomKey = randomLinkKey();
+      setKey(randomKey);
+    }, [setKey]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -71,7 +85,7 @@ export const CreateLinkForm = () => {
             <DialogTitle>Create link</DialogTitle>
           </DialogHeader>
           <div className="mt-4 grid grid-cols-1 gap-4">
-            <div>
+            <div className="space-y-2">
               <Label htmlFor="url">
                 Destination URL
                 <Tooltip delayDuration={100}>
@@ -96,8 +110,19 @@ export const CreateLinkForm = () => {
                 autoComplete="off"
               />
             </div>
-            <div>
-              <Label htmlFor="key">Short Link</Label>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="key">Short Link</Label>
+                <Button
+                  onClick={setRandomKey}
+                  size="icon"
+                  variant="ghost"
+                  className="size-5"
+                  type="button"
+                >
+                  <ShuffleIcon className="size-3" />
+                </Button>
+              </div>
               <div className="flex">
                 <Button
                   variant="outline"
@@ -111,10 +136,12 @@ export const CreateLinkForm = () => {
                   id="key"
                   name="key"
                   type="text"
-                  required
                   disabled={isPending}
                   className="z-[1] rounded-l-none tracking-wide"
                   autoComplete="off"
+                  value={key}
+                  onChange={(e) => setKey(e.target.value)}
+                  placeholder="(Optional)"
                 />
               </div>
             </div>
