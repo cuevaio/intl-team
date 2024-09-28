@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { desc } from 'drizzle-orm';
 import { CornerDownRightIcon } from 'lucide-react';
 
 import { db, schema } from '@/db';
@@ -14,8 +15,13 @@ import {
 
 import { CreateLinkForm } from './create-link-form';
 
+export const runtime = 'edge';
+
 export default async function Page() {
-  const links = await db.select().from(schema.links);
+  const links = await db
+    .select()
+    .from(schema.links)
+    .orderBy(desc(schema.links.createdAt));
 
   return (
     <div className="container mx-auto my-8 space-y-8">
@@ -39,9 +45,16 @@ export default async function Page() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <CornerDownRightIcon className="size-3" />
-                  <div className="text-xs tracking-wider">{l.url}</div>
+                  <div className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-xs tracking-wider">
+                    {l.url}
+                  </div>
                 </div>
-                <Link href={`/l/${l.key}`} className="absolute inset-0" />
+                <Link
+                  href={`/l/${l.key}`}
+                  className="absolute inset-0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
               </div>
             ))}
           </div>
