@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
+import CopyToClipboardButton from './copy-clipboard.-button';
 import { CreateLinkForm } from './create-link-form';
 
 export const runtime = 'edge';
@@ -36,25 +37,31 @@ export default async function Page() {
         <CardContent>
           <div className="grid grid-cols-3 gap-4">
             {links.map((l) => (
-              <div
-                key={l.id}
-                className="relative rounded-lg border p-4 hover:bg-muted"
-              >
-                <div className="font-bold tracking-wide">
-                  intl.team/l/{l.key}
+              <div key={l.id} className="relative rounded-lg border p-4">
+                <div className="flex items-center space-x-2">
+                  <Link
+                    href={`/l/${l.key}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full overflow-hidden text-ellipsis whitespace-nowrap font-bold tracking-wide"
+                  >
+                    intl.team/l/{l.key}
+                  </Link>
+                  <CopyToClipboardButton
+                    text={`https://intl.team/l/${l.key}`}
+                  />
                 </div>
                 <div className="flex items-center space-x-2">
                   <CornerDownRightIcon className="size-3" />
-                  <div className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-xs tracking-wider">
+                  <a
+                    href={l.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-xs tracking-wider"
+                  >
                     {l.url}
-                  </div>
+                  </a>
                 </div>
-                <Link
-                  href={`/l/${l.key}`}
-                  className="absolute inset-0"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                />
               </div>
             ))}
           </div>
