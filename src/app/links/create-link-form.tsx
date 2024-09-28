@@ -28,8 +28,8 @@ export const CreateLinkForm = () => {
 
   React.useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === 'm' || event.key === 'M') {
-        event.preventDefault(); // Prevent the 'M' from being typed
+      if (event.key === 'c' || event.key === 'C') {
+        event.preventDefault(); // Prevent the 'C' from being typed
         setOpen(true);
       }
     };
@@ -61,7 +61,7 @@ export const CreateLinkForm = () => {
         <Button>
           Create link
           <div className="ml-2 size-4 rounded bg-muted text-xs text-primary">
-            M
+            C
           </div>
         </Button>
       </DialogTrigger>
