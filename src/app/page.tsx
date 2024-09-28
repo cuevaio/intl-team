@@ -1,6 +1,9 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
+
+import { buttonVariants } from '@/components/ui/button';
 
 const ThreeDText = () => {
   const [rotation, setRotation] = React.useState({ x: 0, y: 0, z: 0 });
@@ -53,15 +56,15 @@ const ThreeDText = () => {
   }, [animate]);
 
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center gap-4 overflow-hidden bg-gray-900">
-      <p className="font-mono text-2xl text-background">we are the</p>
+    <div className="flex h-screen w-full flex-col items-center justify-center gap-8 overflow-hidden">
+      <p className="font-mono text-2xl">we are the</p>
       <div
         className="perspective-1000 relative cursor-pointer"
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
         <h1
-          className="relative text-8xl font-extrabold text-white transition-all duration-300 ease-out"
+          className="relative text-8xl font-extrabold transition-all duration-300 ease-out"
           style={{
             transform: `
               rotateX(${rotation.x}deg) 
@@ -78,7 +81,7 @@ const ThreeDText = () => {
           INTL TEAM
         </h1>
         <h1
-          className="absolute left-0 top-0 text-8xl font-extrabold text-blue-500 opacity-50 blur-sm transition-all duration-300 ease-out"
+          className="absolute left-0 top-0 text-8xl font-extrabold text-accent-foreground opacity-50 blur-sm transition-all duration-300 ease-out"
           style={{
             transform: `
               rotateX(${rotation.x}deg) 
@@ -92,6 +95,14 @@ const ThreeDText = () => {
           INTL TEAM
         </h1>
       </div>
+      <Link
+        className={buttonVariants({
+          variant: 'default',
+        })}
+        href="/links"
+      >
+        Links Tool
+      </Link>
     </div>
   );
 };

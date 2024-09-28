@@ -34,7 +34,7 @@ export const CreateLinkForm = () => {
           <CardTitle>Add link</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <div>
               <Label htmlFor="url">Url</Label>
               <Input
