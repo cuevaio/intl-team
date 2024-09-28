@@ -27,9 +27,10 @@ export async function createLink(formData: FormData): Promise<
       error: 'Url: ' + urlParsing.error.issues[0].message,
     };
   }
+
   const categoryParsing = z
     .enum(CATEGORIES)
-    .optional()
+    .nullish()
     .safeParse(formData.get('category'));
 
   if (!categoryParsing.success) {

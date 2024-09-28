@@ -18,7 +18,6 @@ import { LocalDate } from '@/components/local-date';
 import CopyToClipboardButton from './copy-clipboard.-button';
 import { CreateLinkForm } from './create-link-form';
 
-export const runtime = 'edge';
 export const preferredRegion = 'iad1';
 
 export default async function Page() {
