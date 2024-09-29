@@ -7,6 +7,7 @@ import { LinkSelect, UserSelect } from '@/db/schema';
 
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Avatar } from '@/components/avatar';
 import { LocalDate } from '@/components/local-date';
 
 import CopyToClipboardButton from './copy-clipboard.-button';
@@ -34,9 +35,7 @@ export const LinkItem = ({
         <CopyToClipboardButton text={`https://intl.team/l/${key}`} />
       </div>
       <div className="flex items-center space-x-2">
-        <div className="flex size-6 flex-none items-center justify-center rounded-full bg-foreground text-xs font-bold text-background">
-          {owner.username![0].toUpperCase()}
-        </div>
+        <Avatar username={owner.username!} />
         <CornerDownRightIcon className="size-3 flex-none" />
         <a
           href={url}
