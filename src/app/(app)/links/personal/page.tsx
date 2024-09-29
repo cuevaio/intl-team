@@ -7,7 +7,7 @@ import { db, schema } from '@/db';
 
 import { LinkItem } from '../link-item';
 
-export const dynamic = true;
+export const dynamic = 'force-dynamic';
 
 export default async function Page() {
   const validatedRequest = await validateRequest();
