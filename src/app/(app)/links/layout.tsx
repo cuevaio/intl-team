@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { KeyHint } from '@/components/key-hint';
 
 import { CreateLinkForm } from './create-link-form';
 
@@ -23,13 +24,13 @@ export default function Layout({ children }: { children: ReactNode }) {
               href="/links"
               className={buttonVariants({ variant: 'outline' })}
             >
-              Team links
+              Team links <KeyHint hint="L" />
             </Link>
             <Link
               href="/links/personal"
               className={buttonVariants({ variant: 'outline' })}
             >
-              Personal links
+              Personal links <KeyHint hint="P" />
             </Link>
             <CreateLinkForm />
           </div>

@@ -3,6 +3,7 @@
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
+import { useKeyPress } from '@/hooks/use-key-press';
 import { useMutation } from '@tanstack/react-query';
 import { CircleHelpIcon, ShuffleIcon } from 'lucide-react';
 import Confetti from 'react-confetti';
@@ -24,6 +25,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { KeyHint } from '@/components/key-hint';
 
 import { randomLinkKey } from '@/lib/nanoid';
 
@@ -47,21 +49,7 @@ export const CreateLinkForm = () => {
     setCategory(undefined);
   }, [setKey, open]);
 
-  React.useEffect(() => {
-    if (open) return;
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === 'c' || event.key === 'C') {
-        event.preventDefault(); // Prevent the 'C' from being typed
-        setOpen(true);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [open]);
+  useKeyPress('c', () => setOpen(true));
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (formData: FormData) => {
@@ -110,9 +98,7 @@ export const CreateLinkForm = () => {
         <DialogTrigger asChild>
           <Button>
             Create link
-            <div className="ml-2 size-4 rounded bg-muted text-xs text-primary">
-              C
-            </div>
+            <KeyHint hint="C" />
           </Button>
         </DialogTrigger>
         <DialogContent>
