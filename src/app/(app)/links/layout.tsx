@@ -12,14 +12,20 @@ import {
 import { KeyHint } from '@/components/key-hint';
 
 import { CreateLinkForm } from './create-link-form';
+import { LinkSearch } from './link-search';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>Links</CardTitle>
-          <div className="flex space-x-2">
+        <CardTitle>Links</CardTitle>
+        <CardDescription>
+          A collection of useful links. Also, a short links service like Bitly.
+        </CardDescription>
+
+        <div className="grid grid-cols-2 items-center gap-4">
+          <LinkSearch />
+          <div className="flex justify-end space-x-2">
             <Link
               href="/links"
               className={buttonVariants({ variant: 'outline' })}
@@ -35,9 +41,6 @@ export default function Layout({ children }: { children: ReactNode }) {
             <CreateLinkForm />
           </div>
         </div>
-        <CardDescription>
-          A collection of useful links. Also, a short links service like Bitly.
-        </CardDescription>
       </CardHeader>
       <CardContent>{children}</CardContent>
     </Card>

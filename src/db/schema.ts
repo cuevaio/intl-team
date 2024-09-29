@@ -7,6 +7,7 @@ import {
   text,
   timestamp,
   varchar,
+  vector,
 } from 'drizzle-orm/pg-core';
 
 import { CATEGORIES } from '@/lib/constants';
@@ -64,6 +65,8 @@ export const links = pgTable(
         onDelete: 'cascade',
       }),
     isPublic: boolean('is_public').notNull().default(true),
+    keyEmbedding: vector('key_embedding', { dimensions: 1024 }),
+    urlEmbedding: vector('url_embedding', { dimensions: 1024 }),
 
     createdAt: timestamp('created_at', {
       withTimezone: true,
@@ -79,6 +82,15 @@ export const links = pgTable(
   (table) => ({
     urlIdx: index('links_url_idx').on(table.url),
     categoryIdx: index('links_category_idx').on(table.category),
+
+    keyEmbeddingIndex: index('keyEmbeddingIndex').using(
+      'hnsw',
+      table.keyEmbedding.op('vector_cosine_ops'),
+    ),
+    urlEmbeddingIndex: index('urlEmbeddingIndex').using(
+      'hnsw',
+      table.urlEmbedding.op('vector_cosine_ops'),
+    ),
   }),
 );
 

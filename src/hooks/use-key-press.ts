@@ -5,7 +5,12 @@ type KeyPressHandler = () => void;
 export function useKeyPress(targetKey: string, handler: KeyPressHandler) {
   React.useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key.toLowerCase() === targetKey.toLowerCase()) {
+      const activeElement = document.activeElement;
+      const isInput =
+        activeElement instanceof HTMLInputElement ||
+        activeElement instanceof HTMLTextAreaElement;
+
+      if (!isInput && event.key.toLowerCase() === targetKey.toLowerCase()) {
         event.preventDefault();
         handler();
       }

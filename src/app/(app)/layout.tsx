@@ -5,6 +5,8 @@ import { KeyHint } from '@/components/key-hint';
 
 import { Logout } from './logout/logout-button';
 
+export const preferredRegion = 'iad1';
+
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="container mx-auto">

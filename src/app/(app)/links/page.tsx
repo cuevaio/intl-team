@@ -4,8 +4,6 @@ import { db } from '@/db';
 
 import { LinkItem } from './link-item';
 
-export const preferredRegion = 'iad1';
-
 export default async function Page() {
   const links = await db.query.links.findMany({
     where: ({ isPublic }, { eq }) => eq(isPublic, true),

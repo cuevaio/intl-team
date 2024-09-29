@@ -13,7 +13,7 @@ import { LocalDate } from '@/components/local-date';
 import CopyToClipboardButton from './copy-clipboard.-button';
 
 export const LinkItem = ({
-  link: { id, key, url, category, createdAt, owner, isPublic },
+  link: { id, key, url, category, updatedAt, owner, isPublic },
 }: {
   link: LinkSelect & {
     owner: User | UserSelect;
@@ -46,7 +46,7 @@ export const LinkItem = ({
           {url}
         </a>
         <div className="text-xs text-muted-foreground">
-          <LocalDate date={createdAt} />
+          <LocalDate date={updatedAt} />
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ import { db } from '@/db';
 import { links } from '@/db/schema';
 
 import { CATEGORIES } from '@/lib/constants';
+import { generateEmbedding } from '@/lib/generate-embedding';
 import { nanoid, randomLinkKey } from '@/lib/nanoid';
 
 export async function createLink(formData: FormData): Promise<
@@ -21,16 +22,19 @@ export async function createLink(formData: FormData): Promise<
     }
   | { success: false; error: string }
 > {
-  let url = String(formData.get('url'));
-  if (!url.startsWith('https://')) url = 'https://' + url;
+  let rawUrl = String(formData.get('url'));
+  if (!rawUrl.startsWith('https://')) rawUrl = 'https://' + rawUrl;
 
-  const urlParsing = z.string().url().safeParse(url);
+  const urlParsing = z.string().url().safeParse(rawUrl);
   if (!urlParsing.success) {
     return {
       success: false,
       error: 'Url: ' + urlParsing.error.issues[0].message,
     };
   }
+
+  const url = urlParsing.data;
+  const urlEmbedding = await generateEmbedding(url);
 
   const categoryParsing = z
     .enum(CATEGORIES)
@@ -81,6 +85,8 @@ export async function createLink(formData: FormData): Promise<
     }
   }
 
+  const keyEmbedding = await generateEmbedding(key!);
+
   const isPublicParsing = z
     .enum(['on'])
     .nullish()
@@ -97,11 +103,13 @@ export async function createLink(formData: FormData): Promise<
   try {
     await db.insert(links).values({
       id: nanoid(),
-      url: urlParsing.data,
+      url,
       key: key!,
       category: categoryParsing.data,
       ownerId: user.id,
       isPublic,
+      urlEmbedding,
+      keyEmbedding,
     });
 
     revalidatePath('/(app)/links/personal/page');
