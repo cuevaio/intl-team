@@ -7,6 +7,9 @@ import { ThemeProvider } from 'next-themes';
 
 import { TooltipProvider } from '@/components/ui/tooltip';
 
+import { CounterStoreProvider } from './counter-store-provider';
+import { SearchOptionsStoreProvider } from './search-options-provider';
+
 const queryClient = new QueryClient();
 
 export const Providers = ({ children }: { children: ReactNode }) => {
@@ -18,7 +21,11 @@ export const Providers = ({ children }: { children: ReactNode }) => {
         enableSystem
         disableTransitionOnChange
       >
-        <TooltipProvider>{children}</TooltipProvider>
+        <TooltipProvider>
+          <CounterStoreProvider>
+            <SearchOptionsStoreProvider>{children}</SearchOptionsStoreProvider>
+          </CounterStoreProvider>
+        </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

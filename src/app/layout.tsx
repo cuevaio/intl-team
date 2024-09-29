@@ -4,8 +4,9 @@ import type { Metadata } from 'next';
 
 import './globals.css';
 
+import { Providers } from '@/providers';
+
 import { KeyMappings } from './key-mappings';
-import { Providers } from './providers';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',

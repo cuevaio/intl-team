@@ -21,9 +21,9 @@ import { LinkItem } from '../link-item';
 export const dynamic = 'force-dynamic';
 export const runtime = 'edge';
 export default async function Page({
-  searchParams: { query },
+  searchParams: { query, searchBy },
 }: {
-  searchParams: { query: string };
+  searchParams: { query: string; searchBy: 'url' | 'key' };
 }) {
   if (!query) {
     return (
@@ -36,12 +36,13 @@ export default async function Page({
   const { user } = await validateRequest();
   const embedding = await generateEmbedding(query);
 
-  const similarity = sql<number>`1 - (${cosineDistance(schema.links.urlEmbedding, embedding)})`;
+  const searchByUrl = searchBy === 'url' ? true : false;
+
+  const similarity = sql<number>`1 - (${cosineDistance(searchByUrl ? schema.links.urlEmbedding : schema.links.keyEmbedding, embedding)})`;
 
   const _links = await db
     .select({
       id: schema.links.id,
-      url: schema.links.url,
       similarity,
     })
     .from(schema.links)

@@ -4,12 +4,14 @@ import React, { FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useKeyPress } from '@/hooks/use-key-press';
+import { useSearchOptionsStore } from '@/providers/search-options-provider';
 
 import { Input } from '@/components/ui/input';
 import { KeyHint } from '@/components/key-hint';
 
 export const LinkSearch = () => {
   const router = useRouter();
+  const { searchBy } = useSearchOptionsStore((state) => state);
 
   function submitHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -19,7 +21,11 @@ export const LinkSearch = () => {
 
     const search = formData.get('search');
     if (search) {
-      router.push(`/links/search?query=${search}`);
+      const url = new URLSearchParams([
+        ['query', String(search)],
+        ['searchBy', searchBy],
+      ]);
+      router.push(`/links/search?${url.toString()}`);
     }
   }
 
