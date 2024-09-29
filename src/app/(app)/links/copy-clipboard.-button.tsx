@@ -24,7 +24,7 @@ const CopyToClipboardButton = ({ text }: { text: string }) => {
       onClick={handleCopy}
       variant="outline"
       size="icon"
-      className="size-7"
+      className="size-7 flex-none"
     >
       {isCopied ? <Check className="size-3" /> : <Copy className="size-3" />}
     </Button>

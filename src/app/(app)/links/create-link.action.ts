@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
+import { validateRequest } from '@/auth/validate-request';
 import { DrizzleError, eq } from 'drizzle-orm';
 import { z } from 'zod';
 
@@ -32,6 +33,9 @@ export async function createLink(formData: FormData): Promise<
     .enum(CATEGORIES)
     .nullish()
     .safeParse(formData.get('category'));
+
+  const validadedRequest = await validateRequest();
+  const user = validadedRequest.user!;
 
   if (!categoryParsing.success) {
     return {
@@ -80,6 +84,7 @@ export async function createLink(formData: FormData): Promise<
       url: urlParsing.data,
       key: key!,
       category: categoryParsing.data,
+      ownerId: user.id,
     });
 
     revalidatePath(`/links`, 'page');

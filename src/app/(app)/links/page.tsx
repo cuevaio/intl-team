@@ -1,9 +1,8 @@
 import Link from 'next/link';
 
-import { desc } from 'drizzle-orm';
 import { CornerDownRightIcon } from 'lucide-react';
 
-import { db, schema } from '@/db';
+import { db } from '@/db';
 
 import { Badge } from '@/components/ui/badge';
 import {
@@ -21,10 +20,13 @@ import { CreateLinkForm } from './create-link-form';
 export const preferredRegion = 'iad1';
 
 export default async function Page() {
-  const links = await db
-    .select()
-    .from(schema.links)
-    .orderBy(desc(schema.links.createdAt));
+  const links = await db.query.links.findMany({
+    where: ({ isPublic }, { eq }) => eq(isPublic, true),
+    orderBy: ({ createdAt }, { desc }) => desc(createdAt),
+    with: {
+      owner: true,
+    },
+  });
 
   return (
     <Card>
@@ -55,7 +57,10 @@ export default async function Page() {
                 <CopyToClipboardButton text={`https://intl.team/l/${l.key}`} />
               </div>
               <div className="flex items-center space-x-2">
-                <CornerDownRightIcon className="size-3" />
+                <div className="flex size-6 flex-none items-center justify-center rounded-full bg-foreground text-xs font-bold text-background">
+                  {l.owner.username![0].toUpperCase()}
+                </div>
+                <CornerDownRightIcon className="size-3 flex-none" />
                 <a
                   href={l.url}
                   target="_blank"
