@@ -12,7 +12,7 @@ import { LocalDate } from '@/components/local-date';
 import CopyToClipboardButton from './copy-clipboard.-button';
 
 export const LinkItem = ({
-  link: { id, key, url, category, createdAt, owner },
+  link: { id, key, url, category, createdAt, owner, isPublic },
 }: {
   link: LinkSelect & {
     owner: User | UserSelect;
@@ -29,6 +29,7 @@ export const LinkItem = ({
         >
           intl.team/l/{key}
         </Link>
+        {isPublic ? <></> : <Badge variant="secondary">Private</Badge>}
         {category ? <Badge>{category}</Badge> : <></>}
         <CopyToClipboardButton text={`https://intl.team/l/${key}`} />
       </div>

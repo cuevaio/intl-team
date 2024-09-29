@@ -15,6 +15,9 @@ import { nanoid, randomLinkKey } from '@/lib/nanoid';
 export async function createLink(formData: FormData): Promise<
   | {
       success: true;
+      data: {
+        isPublic: boolean;
+      };
     }
   | { success: false; error: string }
 > {
@@ -78,6 +81,19 @@ export async function createLink(formData: FormData): Promise<
     }
   }
 
+  const isPublicParsing = z
+    .enum(['on'])
+    .nullish()
+    .safeParse(formData.get('public'));
+  if (!isPublicParsing.success) {
+    return {
+      success: false,
+      error: 'Public: ' + isPublicParsing.error.issues[0].message,
+    };
+  }
+
+  const isPublic = isPublicParsing.data === 'on' ? true : false;
+
   try {
     await db.insert(links).values({
       id: nanoid(),
@@ -85,6 +101,7 @@ export async function createLink(formData: FormData): Promise<
       key: key!,
       category: categoryParsing.data,
       ownerId: user.id,
+      isPublic,
     });
 
     revalidatePath('/(app)/links/page');
@@ -92,6 +109,9 @@ export async function createLink(formData: FormData): Promise<
 
     return {
       success: true,
+      data: {
+        isPublic,
+      },
     };
   } catch (error) {
     if (error instanceof DrizzleError) {
