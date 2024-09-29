@@ -10,6 +10,25 @@ import {
 
 import { CATEGORIES } from '@/lib/constants';
 
+export const users = pgTable('user', {
+  id: varchar('id', { length: 12 }).primaryKey(),
+  username: varchar('username', { length: 256 }).unique(),
+  passwordHash: varchar('password_hash', { length: 256 }).notNull(),
+});
+
+export type UserSelect = typeof users.$inferSelect;
+
+export const sessions = pgTable('session', {
+  id: text('id').primaryKey(),
+  userId: varchar('user_id', { length: 12 })
+    .notNull()
+    .references(() => users.id),
+  expiresAt: timestamp('expires_at', {
+    withTimezone: true,
+    mode: 'date',
+  }).notNull(),
+});
+
 export const linkCategory = pgEnum('link_category', CATEGORIES);
 
 export const links = pgTable(

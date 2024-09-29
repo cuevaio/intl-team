@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 
@@ -27,6 +28,9 @@ export const createDBConnection = () => {
 
   return db;
 };
+
 const db = singleton('db', createDBConnection);
 
-export { db, schema };
+const adapter = new DrizzlePostgreSQLAdapter(db, schema.sessions, schema.users);
+
+export { db, schema, adapter };
