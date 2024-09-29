@@ -8,6 +8,7 @@ export const KeyMappings = () => {
   const router = useRouter();
   useKeyPress('l', () => router.push('/links'));
   useKeyPress('p', () => router.push('/links/personal'));
+  useKeyPress('h', () => router.push('/'));
 
   return null;
 };
