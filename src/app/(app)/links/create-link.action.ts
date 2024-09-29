@@ -104,8 +104,10 @@ export async function createLink(formData: FormData): Promise<
       isPublic,
     });
 
-    revalidatePath('/(app)/links/page');
     revalidatePath('/(app)/links/personal/page');
+    if (isPublic) {
+      revalidatePath('/(app)/links/page');
+    }
 
     return {
       success: true,
