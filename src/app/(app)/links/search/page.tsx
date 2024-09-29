@@ -64,6 +64,13 @@ export default async function Page({
     ),
   });
 
+  links.sort((a, b) => {
+    const aSimilarity = _links.find((l) => l.id === a.id)!.similarity;
+    const bSimilarity = _links.find((l) => l.id === b.id)!.similarity;
+
+    return bSimilarity - aSimilarity;
+  });
+
   if (!links.length) {
     return (
       <p className="text-center text-xs text-muted-foreground">
