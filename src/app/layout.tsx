@@ -30,13 +30,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="min-h-[120%]">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} relative antialiased`}
       >
         <Providers>
           <KeyMappings />
           <>{children}</>
+          <div className="h-32"></div>
+          <div className="absolute bottom-0 h-16 w-full text-center">
+            <a
+              href="https://cueva.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs underline"
+            >
+              © 2024 Anthony Cueva
+            </a>
+          </div>
         </Providers>
       </body>
     </html>

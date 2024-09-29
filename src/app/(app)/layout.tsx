@@ -13,17 +13,6 @@ export default function Layout({ children }: { children: ReactNode }) {
         <Logout />
       </nav>
       <>{children}</>
-
-      <p className="mb-6 mt-16 text-center">
-        <a
-          href="https://cueva.io/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs underline"
-        >
-          © 2024 Anthony Cueva
-        </a>
-      </p>
     </div>
   );
 }

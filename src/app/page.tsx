@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 
 import { buttonVariants } from '@/components/ui/button';
+import { KeyHint } from '@/components/key-hint';
 
 const ThreeDText = () => {
   const [rotation, setRotation] = React.useState({ x: 0, y: 0, z: 0 });
@@ -101,7 +102,7 @@ const ThreeDText = () => {
         })}
         href="/links"
       >
-        Links Tool
+        Links Tool <KeyHint hint="L" />
       </Link>
     </div>
   );
