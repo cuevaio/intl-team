@@ -88,3 +88,5 @@ export const linksRelations = relations(links, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export type LinkSelect = typeof links.$inferSelect;

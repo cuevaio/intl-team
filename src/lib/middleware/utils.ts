@@ -3,8 +3,13 @@ import { NextRequest } from 'next/server';
 export const parse = (req: NextRequest) => {
   const domain = req.headers.get('host');
   const path = req.nextUrl.pathname;
-  let key: string | undefined = decodeURIComponent(path.split('/')[2]); // to handle foreign languages like Hebrew
-  if (key === 'undefined') key = undefined;
+
+  let key: string | undefined = undefined;
+  if (path.includes('/l/')) {
+    key = decodeURIComponent(path.split('/')[2]); // to handle foreign languages like Hebrew
+    if (key === 'undefined') key = undefined;
+  }
+
   return { domain, path, key };
 };
 

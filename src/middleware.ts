@@ -7,7 +7,7 @@ import LinkMiddleware from './lib/middleware/link';
 
 export default async function middleware(request: NextRequest) {
   // check if this is a short link
-  const { key } = parse(request);
+  const { path, key } = parse(request);
 
   if (key) {
     return LinkMiddleware(request);
@@ -17,16 +17,14 @@ export default async function middleware(request: NextRequest) {
 
   // we don't need auth in some pages
   const NO_AUTH_PATHS = ['/signin', '/signup', '/'];
-  if (NO_AUTH_PATHS.find((x) => x === request.nextUrl.pathname)) {
+  if (NO_AUTH_PATHS.find((x) => x === path)) {
     return response;
   }
 
   // we do need auth for most pages
   const sessionId = request.cookies.get(lucia.sessionCookieName)?.value ?? null;
   if (!sessionId) {
-    return NextResponse.redirect(
-      new URL(`/signin?after=${request.nextUrl.pathname}`, request.url),
-    );
+    return NextResponse.redirect(new URL(`/signin?after=${path}`, request.url));
   }
   const result = await lucia.validateSession(sessionId);
 

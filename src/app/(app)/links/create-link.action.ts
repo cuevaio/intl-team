@@ -56,7 +56,7 @@ export async function createLink(formData: FormData): Promise<
     if (!keyParsing.success) {
       return {
         success: false,
-        error: 'Title: ' + keyParsing.error.issues[0].message,
+        error: 'Key: ' + keyParsing.error.issues[0].message,
       };
     } else {
       key = keyParsing.data;
@@ -87,7 +87,9 @@ export async function createLink(formData: FormData): Promise<
       ownerId: user.id,
     });
 
-    revalidatePath(`/links`, 'page');
+    revalidatePath('/(app)/links/page');
+    revalidatePath('/(app)/links/personal/page');
+
     return {
       success: true,
     };
