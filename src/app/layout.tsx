@@ -24,6 +24,7 @@ export const metadata: Metadata = {
   description:
     "We're building tools to make the lives of INTL team members a lot easier",
 };
+export const preferredRegion = 'iad1';
 
 export default function RootLayout({
   children,
@@ -31,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="min-h-[120%]">
+    <html lang="en" className="min-h-[120%]" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} relative antialiased`}
       >

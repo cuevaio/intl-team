@@ -2,10 +2,9 @@ import { ReactNode } from 'react';
 import Link from 'next/link';
 
 import { KeyHint } from '@/components/key-hint';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 import { Logout } from './logout/logout-button';
-
-export const preferredRegion = 'iad1';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
@@ -14,7 +13,10 @@ export default function Layout({ children }: { children: ReactNode }) {
         <Link href="/" className="flex items-center font-bold">
           INTL TEAM Tools <KeyHint hint="H" />
         </Link>
-        <Logout />
+        <div className="flex space-x-2">
+          <Logout />
+          <ThemeToggle />
+        </div>
       </nav>
       <>{children}</>
     </div>
